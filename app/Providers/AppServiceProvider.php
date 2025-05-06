@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\FoodController;
+use App\Interfaces\BaseRepoInterface;
+use App\Interfaces\PackageSearchInterface;
+use App\Interfaces\FoodSearchInterface;
+use App\Services\PackageService;
+use App\Services\FoodService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,6 +19,22 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->when(PackageController::class)
+        ->needs(BaseRepoInterface::class)
+        ->give(PackageService::class);
+
+    $this->app->when(PackageController::class)
+        ->needs(PackageSearchInterface::class)
+        ->give(PackageService::class);
+
+
+    $this->app->when(FoodController::class)
+        ->needs(BaseRepoInterface::class)
+        ->give(FoodService::class);
+        
+    $this->app->when(FoodController::class)
+        ->needs(FoodSearchInterface::class)
+        ->give(FoodService::class);
     }
 
     /**
